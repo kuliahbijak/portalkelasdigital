@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>PortalKelas Digital</title>
+  <meta name="description" content="Portal kelas online: katalog kelas, ruang belajar dengan learning path, progres, dan materi unduhan.">
+  <meta name="theme-color" content="#6C3CE9">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/png" href="./icons/favicon.png">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="PortalKelas">
+  <!-- Buka koneksi ke Apps Script lebih awal (respons /exec dialihkan ke googleusercontent) -->
+  <link rel="preconnect" href="https://script.google.com" crossorigin>
+  <link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/style.css?v=2.0.0">
+  <script src="./js/config.js?v=2.0.0"></script>
+  <script>
+    /* Tema tersimpan diterapkan SEBELUM render agar tidak berkedip */
+    try { var t = localStorage.getItem('pk_theme'); if (t === '"dark"' || t === '"light"') document.documentElement.setAttribute('data-theme', JSON.parse(t)); } catch (e) {}
+    /* Boot awal: data dari server diminta SEKARANG, paralel dengan pemuatan file JS (hemat ±1 detik).
+       Token sesi dikirim di body POST (bukan URL). Hasilnya dipakai init.js (window.__BOOTP). */
+    (function () {
+      try {
+        var u = (window.APP_CONFIG || {}).GAS_URL || '';
+        if (!/^https:\/\/script\.google\.com\/macros\/s\/[\w-]{20,}\/exec$/.test(u) || /GANTI|XXXX/.test(u)) return;
+        var tok = ''; try { tok = JSON.parse(localStorage.getItem('pk_tok') || '""') || ''; } catch (e) {}
+        window.__BOOT_TOK = tok; window.__BOOT_T0 = (window.performance && performance.now()) || 0;
+        window.__BOOTP = fetch(u, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'bootstrap', args: [tok] }) })
+          .then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; });
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body class="shell-pub">
+  <div id="netbar" aria-hidden="true"></div>
+  <a class="sr" href="#main" onclick="event.preventDefault();document.getElementById('main').focus();">Lewati ke konten utama</a>
+  <div id="app">
+    <aside id="rail" aria-label="Navigasi member"></aside>
+    <aside id="side" aria-label="Navigasi admin"></aside>
+    <header id="topbar"></header>
+    <main id="main" tabindex="-1">
+      <!-- Kerangka awal: tampil sampai JavaScript merender tampilan pertama -->
+      <div id="boot-sk" class="col g16" aria-hidden="true">
+        <div class="sk" style="height:180px;border-radius:26px"></div>
+        <div class="course-grid">
+          <div class="sk" style="height:260px"></div><div class="sk" style="height:260px"></div><div class="sk" style="height:260px"></div>
+        </div>
+      </div>
+      <div id="views"></div>
+    </main>
+    <nav id="bnav" aria-label="Navigasi bawah"></nav>
+  </div>
+  <div id="scrim"></div>
+  <div id="modals"></div>
+  <div id="toasts" role="status" aria-live="polite"></div>
+  <noscript><p style="padding:24px;font-family:system-ui">Aktifkan JavaScript untuk membuka PortalKelas.</p></noscript>
+  <!-- Urutan penting: inti → komponen → tampilan → inisialisasi (defer = tidak menahan render) -->
+  <script defer src="./js/core.js?v=2.0.0"></script>
+  <script defer src="./js/ui.js?v=2.0.0"></script>
+  <script defer src="./js/publik.js?v=2.0.0"></script>
+  <script defer src="./js/member.js?v=2.0.0"></script>
+  <script defer src="./js/admin-katalog.js?v=2.0.0"></script>
+  <script defer src="./js/admin-crm.js?v=2.0.0"></script>
+  <script defer src="./js/admin-sistem.js?v=2.0.0"></script>
+  <script defer src="./js/init.js?v=2.0.0"></script>
+</body>
+</html>
